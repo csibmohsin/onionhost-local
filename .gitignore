@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Tor runtime, hidden service keys and private data (CRITICAL: Never commit secret keys!)
+data/
+logs/
+bin/tor/*
+!bin/tor/.gitkeep
+config/settings.json
+config/torrc
+
+# Internal development tests and scripts
+tests/
+scripts/
+
+# Environment files and virtual environments
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# IDE / Editor configurations
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS metadata
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Temporary files
+*.tmp
+temp/

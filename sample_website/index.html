@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONIONHOST IS WORKING!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card-container">
+        <div class="badge-pill">
+            <span class="status-dot"></span> Tor v3 Onion Service Active
+        </div>
+
+        <h1 class="headline">ONIONHOST IS WORKING!</h1>
+        
+        <p class="subtitle">
+            This website is hosted directly from a local Windows computer as a decentralized, 
+            end-to-end encrypted Tor .onion service.
+        </p>
+
+        <div class="feature-grid">
+            <div class="feature-box">
+                <div class="icon">&#128187;</div>
+                <h3>Self-Hosted on Windows</h3>
+                <p>Running directly on your local machine. No third-party servers, cloud providers, or VPS fees.</p>
+            </div>
+
+            <div class="feature-box">
+                <div class="icon">&#128272;</div>
+                <h3>Zero Port Forwarding</h3>
+                <p>Inbound connections tunnel through Tor rendezvous circuits without opening router ports or NAT modifications.</p>
+            </div>
+
+            <div class="feature-box">
+                <div class="icon">&#128737;</div>
+                <h3>Secure Path Sandbox</h3>
+                <p>Strict directory traversal prevention, local HTTP binding (127.0.0.1), and zero filesystem leakage.</p>
+            </div>
+        </div>
+
+        <div class="info-banner">
+            <div class="info-row">
+                <span class="label">Host Status:</span>
+                <span class="val success">ONLINE &bull; 100% Bootstrapped</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Local Server:</span>
+                <span class="val code" id="local-server-text">http://127.0.0.1</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Client Time:</span>
+                <span class="val" id="clock-display">Synchronizing...</span>
+            </div>
+        </div>
+
+        <div class="action-footer">
+            <button class="btn btn-secondary" onclick="testInteractive()">Run Browser Verification</button>
+            <div id="test-output" class="test-message"></div>
+        </div>
+
+        <div class="footer-note">
+            Hosted via <strong>OnionHost</strong> &bull; Anonymous, Local-First Web Platform
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

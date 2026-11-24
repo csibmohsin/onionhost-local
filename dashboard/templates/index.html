@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnionHost Local &bull; Self-Hosted Tor Onion Infrastructure</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=2.6">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%200%2024%2024%22 fill=%22none%22 stroke=%22%232563eb%22 stroke-width=%222%22><circle cx=%2212%22 cy=%2212%22 r=%229%22/><path d=%22M12 3v18%22/><path d=%22M3 12h18%22/></svg>">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- LEFT SIDEBAR (Matching Reference Image) -->
+        <aside class="app-sidebar">
+            <div class="sidebar-top">
+                <!-- Brand Header -->
+                <div class="sidebar-brand">
+                    <div class="brand-left-group">
+                        <div class="brand-onion-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2C7.5 2 4 6.5 4 12c0 5 3.5 9 8 9s8-4 8-9c0-5.5-3.5-10-8-10z"/>
+                                <path d="M12 6c-2.5 0-4.5 2.5-4.5 6s2 6 4.5 6 4.5-2.5 4.5-6-2-6-4.5-6z"/>
+                                <path d="M12 2v20"/>
+                            </svg>
+                        </div>
+                        <div class="brand-info">
+                            <div class="brand-name-row">
+                                <span class="brand-title">ONIONHOST LOCAL</span>
+                                <span class="brand-version-pill">v2.0 Pro</span>
+                            </div>
+                            <span class="brand-sub">Local Station</span>
+                        </div>
+                    </div>
+                    <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Collapse / Expand Sidebar" aria-label="Toggle Sidebar">
+                        <svg class="icon-collapse" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                        <svg class="icon-expand" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Navigation Group: DASHBOARD -->
+                <div class="nav-group">
+                    <span class="nav-category">DASHBOARD</span>
+                    <button class="nav-item active" id="nav-overview" onclick="switchSidebar('overview')" title="Overview">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        <span>Overview</span>
+                    </button>
+                    <button class="nav-item" id="nav-websites" onclick="switchSidebar('websites')" title="Websites &amp; Services">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        <span>Websites &amp; Services</span>
+                    </button>
+                    <button class="nav-item" id="nav-files" onclick="switchSidebar('files')" title="File Manager">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                        <span>File Manager</span>
+                    </button>
+                    <button class="nav-item" id="nav-code" onclick="switchSidebar('code')" title="Code IDE">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        <span>Code IDE</span>
+                    </button>
+                    <button class="nav-item" id="nav-traffic" onclick="switchSidebar('traffic')" title="Traffic &amp; Circuits">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                        <span>Traffic &amp; Circuits</span>
+                    </button>
+                    <button class="nav-item" id="nav-telemetry" onclick="switchSidebar('telemetry')" title="Live Telemetry">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        <span>Live Telemetry</span>
+                    </button>
+                </div>
+
+                <!-- Navigation Group: MANAGEMENT -->
+                <div class="nav-group">
+                    <span class="nav-category">MANAGEMENT</span>
+                    <button class="nav-item" id="nav-nodes" onclick="switchSidebar('nodes')" title="Tor Nodes">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                        <span>Tor Nodes</span>
+                    </button>
+                    <button class="nav-item" id="nav-service-control" onclick="switchSidebar('service-control')" title="Service Control">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <span>Service Control</span>
+                    </button>
+                    <button class="nav-item" id="nav-logs" onclick="switchSidebar('logs')" title="Logs &amp; Activity">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        <span>Logs &amp; Activity</span>
+                    </button>
+                </div>
+
+                <!-- Navigation Group: SYSTEM -->
+                <div class="nav-group">
+                    <span class="nav-category">SYSTEM</span>
+                    <button class="nav-item" onclick="showToast('Settings: System configuration synchronized with config.json', 'info')" title="Settings">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        <span>Settings</span>
+                    </button>
+                    <button class="nav-item" onclick="showToast('Backup: Cryptographic v3 keys safely secured in data/services/', 'info')" title="Backup &amp; Restore">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                        <span>Backup &amp; Restore</span>
+                    </button>
+                    <button class="nav-item" onclick="openAboutModal()" title="About">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        <span>About</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom Profile: MM Mohsin Khawaja Administrator (Clickable) -->
+            <div class="sidebar-profile" id="user-profile-btn" onclick="openProfileModal()" style="cursor: pointer;" title="Click to view &amp; change profile">
+                <div class="profile-left">
+                    <div class="avatar-mm" id="profile-avatar">MK</div>
+                    <div class="profile-meta">
+                        <span class="profile-name" id="profile-name-display">Mohsin Khawaja</span>
+                        <span class="profile-role" id="profile-role-display">Administrator</span>
+                    </div>
+                </div>
+                <span class="profile-caret">&#9662;</span>
+            </div>
+        </aside>
+
+        <!-- MAIN VIEWPORT -->
+        <div class="app-main">
+            <!-- Top Header Bar -->
+            <header class="top-header">
+                <div class="top-header-left">
+                    <div class="tor-status-pill" id="global-tor-pill">
+                        <span class="status-dot dot-green" id="tor-dot"></span>
+                        <span id="tor-status-text">Tor: Connected &amp; Routing</span>
+                        <span id="tor-pct" style="display: none;">100%</span>
+                    </div>
+                    <span class="header-divider">|</span>
+                    <div class="header-server-status">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        <span>Localhost (XAMPP): Online</span>
+                    </div>
+                </div>
+
+                <div class="top-header-right">
+                    <button class="header-icon-btn" title="System Notifications" onclick="showToast('All Tor onion services and background daemons running normally.', 'info')">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="notification-badge"></span>
+                    </button>
+                    <button class="header-icon-btn" title="Theme Settings" onclick="showToast('Light SaaS Pro Theme Active', 'info')">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Content Container -->
+            <main class="content-wrapper">
+                <!-- Toast Notification Container -->
+                <div id="toast-container" class="toast-container"></div>
+
+                <!-- Hero Welcome Section -->
+                <section class="welcome-section">
+                    <div class="welcome-info">
+                        <span class="infra-tag">Infrastructure Control Center</span>
+                        <h1 class="welcome-title" id="welcome-title-text">Welcome back, Mohsin Khawaja</h1>
+                        <p class="welcome-sub">Manage your onion websites, services, files and monitor traffic from a single dashboard.</p>
+                    </div>
+                    <div class="welcome-actions">
+                        <div class="date-pill-card">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <div id="date-pill-text">Tue, 24 Nov 2026<br><span style="color: var(--text-hint); font-size: 11px;">21:10 IST</span></div>
+                        </div>
+                        <button class="btn-primary-app" onclick="openCreateAppModal()">+ Create New App</button>
+                    </div>
+                </section>
+
+                <!-- 4 KPI Summary Cards (Matching Reference Image) -->
+                <section class="kpi-grid">
+                    <!-- KPI 1: Active Services -->
+                    <div class="kpi-card-saas">
+                        <div class="kpi-icon-box kpi-icon-blue">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                        </div>
+                        <div class="kpi-details">
+                            <div class="kpi-title-row">
+                                <span class="kpi-label">Active Services</span>
+                                <span class="kpi-badge-green"><span class="status-dot dot-green"></span> Running</span>
+                            </div>
+                            <div class="kpi-number" id="kpi-active-sites">1</div>
+                            <span class="kpi-caption">Total registered: <span id="kpi-total-sites">2</span></span>
+                        </div>
+                    </div>
+
+                    <!-- KPI 2: Encrypted Requests -->
+                    <div class="kpi-card-saas">
+                        <div class="kpi-icon-box kpi-icon-purple">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                        </div>
+                        <div class="kpi-details">
+                            <div class="kpi-title-row">
+                                <span class="kpi-label">Encrypted Requests</span>
+                            </div>
+                            <div class="kpi-number" id="kpi-requests">0</div>
+                            <span class="kpi-caption">Multi-hop onion traffic</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI 3: Data Transferred -->
+                    <div class="kpi-card-saas">
+                        <div class="kpi-icon-box kpi-icon-orange">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                        </div>
+                        <div class="kpi-details">
+                            <div class="kpi-title-row">
+                                <span class="kpi-label">Data Transferred</span>
+                            </div>
+                            <div class="kpi-number" id="kpi-bytes">0.0 B</div>
+                            <span class="kpi-caption">End-to-end encrypted payloads</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI 4: Server Uptime -->
+                    <div class="kpi-card-saas">
+                        <div class="kpi-icon-box kpi-icon-green">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div class="kpi-details">
+                            <div class="kpi-title-row">
+                                <span class="kpi-label">Server Uptime</span>
+                            </div>
+                            <div class="kpi-number" id="kpi-uptime">1m 54s</div>
+                            <span class="kpi-caption">Continuous background runtime</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MIDDLE ROW (3 Widgets matching Reference Image) -->
+                <section class="middle-grid">
+                    <!-- Widget 1: Traffic Chart (Last 30 Minutes) -->
+                    <div class="saas-card">
+                        <div class="card-title-row">
+                            <div class="card-title-left">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                                <span>Traffic (Last 30 Minutes)</span>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <!-- Y-Axis Labels -->
+                            <div class="chart-y-axis">
+                                <span>32 KB</span>
+                                <span>24 KB</span>
+                                <span>16 KB</span>
+                                <span>8 KB</span>
+                                <span>0 KB</span>
+                            </div>
+
+                            <!-- SVG Spline Area Chart -->
+                            <svg viewBox="0 0 500 130" class="chart-svg" preserveAspectRatio="none" style="padding-left: 36px;">
+                                <defs>
+                                    <linearGradient id="trafficGradient" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.32" />
+                                        <stop offset="85%" stop-color="#3b82f6" stop-opacity="0.04" />
+                                        <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0" />
+                                    </linearGradient>
+                                </defs>
+                                <!-- Grid Lines -->
+                                <line x1="0" y1="10" x2="500" y2="10" stroke="#f1f5f9" stroke-width="1" />
+                                <line x1="0" y1="40" x2="500" y2="40" stroke="#f1f5f9" stroke-width="1" />
+                                <line x1="0" y1="70" x2="500" y2="70" stroke="#f1f5f9" stroke-width="1" />
+                                <line x1="0" y1="100" x2="500" y2="100" stroke="#f1f5f9" stroke-width="1" />
+                                <!-- Area Path -->
+                                <path d="M 0 108 C 45 102, 60 88, 90 92 C 120 96, 140 115, 175 110 C 210 104, 230 68, 260 62 C 290 56, 310 82, 345 80 C 375 78, 395 62, 425 64 C 455 66, 480 32, 500 24 L 500 125 L 0 125 Z" fill="url(#trafficGradient)" />
+                                <!-- Line Stroke Path -->
+                                <path d="M 0 108 C 45 102, 60 88, 90 92 C 120 96, 140 115, 175 110 C 210 104, 230 68, 260 62 C 290 56, 310 82, 345 80 C 375 78, 395 62, 425 64 C 455 66, 480 32, 500 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" />
+                            </svg>
+
+                            <!-- X-Axis Labels -->
+                            <div class="chart-x-axis">
+                                <span>20:40</span>
+                                <span>20:45</span>
+                                <span>20:50</span>
+                                <span>20:55</span>
+                                <span>21:00</span>
+                                <span>21:05</span>
+                                <span>21:10</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Widget 2: Network & Tor Status -->
+                    <div class="saas-card">
+                        <div class="card-title-row">
+                            <div class="card-title-left">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                <span>Network &amp; Tor Status</span>
+                            </div>
+                            <span class="kpi-badge-green"><span class="status-dot dot-green"></span> Connected</span>
+                        </div>
+
+                        <div class="status-list">
+                            <div class="status-row">
+                                <div class="status-label-group">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C7.5 2 4 6.5 4 12c0 5 3.5 9 8 9s8-4 8-9c0-5.5-3.5-10-8-10z"/><path d="M12 2v20"/></svg>
+                                    <span>Tor Circuit</span>
+                                </div>
+                                <span class="kpi-badge-green"><span class="status-dot dot-green"></span> Active (100%)</span>
+                            </div>
+
+                            <div class="status-row">
+                                <div class="status-label-group">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                                    <span>Exit Node</span>
+                                </div>
+                                <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; color: #475569;">India (Random)</span>
+                            </div>
+
+                            <div class="status-row">
+                                <div class="status-label-group">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                                    <span>Circuit Hops</span>
+                                </div>
+                                <span class="status-value-text">3</span>
+                            </div>
+
+                            <div class="status-row">
+                                <div class="status-label-group">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                                    <span>Latency</span>
+                                </div>
+                                <span class="status-value-text">312 ms</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Widget 3: Quick Actions -->
+                    <div class="saas-card">
+                        <div class="card-title-row">
+                            <div class="card-title-left">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                <span>Quick Actions</span>
+                            </div>
+                        </div>
+
+                        <button class="quick-action-featured" id="quick-action-multi-btn" onclick="launchMultipleSites()">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
+                            <span id="quick-action-multi-text">Launch All Sites Simultaneously</span>
+                        </button>
+
+                        <button class="quick-action-link" onclick="switchTab('files')">
+                            <span class="link-left">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                                <span>Open File Manager</span>
+                            </span>
+                            <span class="link-chevron">&rsaquo;</span>
+                        </button>
+
+                        <button class="quick-action-link" onclick="switchTab('files')">
+                            <span class="link-left">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                                <span>Open Code IDE</span>
+                            </span>
+                            <span class="link-chevron">&rsaquo;</span>
+                        </button>
+
+                        <button class="quick-action-link" onclick="loadSites(); showToast('Services refreshed.', 'info');">
+                            <span class="link-left">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                                <span>Reload Services</span>
+                            </span>
+                            <span class="link-chevron">&rsaquo;</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- SUB-NAVIGATION TABS (Matching Reference Image) -->
+                <nav class="tabs-bar">
+                    <button class="tab-btn active" id="tab-btn-sites" onclick="switchTab('sites')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        <span>Websites &amp; Onion Nodes</span>
+                    </button>
+                    <button class="tab-btn" id="tab-btn-files" onclick="switchTab('files')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        <span>Code IDE &amp; File Manager</span>
+                    </button>
+                    <button class="tab-btn" id="tab-btn-stats" onclick="switchTab('stats')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                        <span>Traffic &amp; Circuit Inspector</span>
+                    </button>
+                    <button class="tab-btn" id="tab-btn-logs" onclick="switchTab('logs')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        <span>Live Tor Telemetry</span>
+                    </button>
+                </nav>
+
+                <!-- TAB 1: WEBSITES & ONION NODES -->
+                <div id="tab-sites" class="tab-content active">
+                    <!-- Section Header -->
+                    <div class="section-header-row">
+                        <div class="section-header-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                            <span>Active Onion Websites</span>
+                        </div>
+                        <div class="section-header-actions">
+                            <button class="btn-soft-action primary" onclick="openHostUrlModal()">🌐 Host Website URL (Mirror)</button>
+                            <button class="btn-soft-action primary" onclick="openCreateAppModal()">+ New Website App</button>
+                            <button class="btn-soft-action" onclick="loadSites()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                                <span>Reload Nodes</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Direct Path Quick Host Bar -->
+                    <div class="direct-host-bar">
+                        <input type="text" id="quick-folder-input" class="form-input-clean" placeholder="Enter Direct Windows Folder Path or Website URL (e.g. www.csib.co.in or C:\my-site)...">
+                        <input type="number" id="quick-port-input" class="form-input-clean port-input-clean" placeholder="Port" value="8080">
+                        <button class="btn btn-primary" onclick="submitQuickHost()">Host This Path / URL</button>
+                        <button class="btn btn-secondary" onclick="openHostUrlModal()">🌐 Host Website URL (Mirror)</button>
+                        <button class="btn btn-secondary" onclick="openHostPortModal()">Host Localhost (XAMPP)</button>
+                        <button class="btn btn-danger" onclick="stopAllHosting()">Stop All</button>
+                    </div>
+
+                    <!-- Sites Table Container (Populated dynamically by dashboard.js) -->
+                    <div id="sites-grid">
+                        <!-- Loaded dynamically as modern SaaS table -->
+                    </div>
+                </div>
+
+                <!-- TAB 2: CODE IDE & FILE MANAGER -->
+                <div id="tab-files" class="tab-content">
+                    <div class="file-manager-container">
+                        <div class="fm-header">
+                            <div class="fm-site-selector">
+                                <label for="fm-site-select">Target Website:</label>
+                                <select id="fm-site-select" class="form-input-clean" style="max-width: 260px;" onchange="onFileSiteChanged()">
+                                    <option value="">-- No sites registered --</option>
+                                </select>
+                            </div>
+                            <div class="fm-actions">
+                                <button class="btn btn-sm btn-secondary" onclick="openNewFolderModal()">+ New Folder</button>
+                                <input type="file" id="file-upload-input" multiple style="display:none;" onchange="handleFileUpload(event)">
+                                <button class="btn btn-sm btn-primary" onclick="document.getElementById('file-upload-input').click()">+ Upload Files</button>
+                                <button class="btn btn-sm btn-secondary" onclick="openNewFileModal()">+ New HTML File</button>
+                                <button class="btn btn-sm btn-secondary" onclick="loadFilesForCurrentSite()">&#x21bb; Refresh</button>
+                            </div>
+                        </div>
+
+                        <div class="fm-breadcrumbs" id="fm-breadcrumbs">
+                            <span class="crumb active">/ (root)</span>
+                        </div>
+
+                        <div class="table-card-container">
+                            <table class="saas-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item Name</th>
+                                        <th>Size</th>
+                                        <th>Last Modified</th>
+                                        <th style="text-align: right;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fm-files-tbody">
+                                    <tr><td colspan="4" class="text-center text-muted" style="padding: 30px;">Select a site to explore and edit files.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: TRAFFIC & CIRCUIT INSPECTOR -->
+                <div id="tab-stats" class="tab-content">
+                    <div class="file-manager-container">
+                        <div class="section-header-row" style="margin-bottom: 12px;">
+                            <div class="section-header-title">
+                                <span>Live Inbound Onion Circuit Requests</span>
+                            </div>
+                            <span class="text-muted" style="font-size: 12px;">Tor multi-hop rendezvous circuits forwarded to local loopback (127.0.0.1)</span>
+                        </div>
+
+                        <div class="table-card-container">
+                            <table class="saas-table">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Website</th>
+                                        <th>Method</th>
+                                        <th>Request Path</th>
+                                        <th>HTTP Status</th>
+                                        <th>Payload Size</th>
+                                        <th>Source Route</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stats-requests-tbody">
+                                    <tr><td colspan="7" class="text-center text-muted" style="padding: 30px;">No requests recorded yet. Forwarded requests will appear here live.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: LIVE TOR TELEMETRY -->
+                <div id="tab-logs" class="tab-content">
+                    <div class="logs-panel">
+                        <div class="logs-toolbar">
+                            <div class="log-filter-tabs">
+                                <button class="filter-tab active" onclick="setLogView('all')">All Telemetry</button>
+                                <button class="filter-tab" onclick="setLogView('tor')">Tor Daemon Stream</button>
+                                <button class="filter-tab" onclick="setLogView('app')">C2 Core &amp; Web Server</button>
+                            </div>
+                            <div class="logs-actions" style="display: flex; align-items: center; gap: 10px;">
+                                <label style="color: var(--text-muted); font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                    <input type="checkbox" id="log-autoscroll" checked> Auto-scroll
+                                </label>
+                                <button class="btn btn-sm btn-secondary" onclick="copyLogsToClipboard()">Copy Logs</button>
+                                <button class="btn btn-sm btn-secondary" onclick="clearLogs()">Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="terminal-window" id="terminal-window">
+                            <pre id="log-output">Initializing OnionHost telemetry stream...</pre>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODALS (PRESERVED DOM IDS & CONTROLS)
+    =========================================== -->
+
+    <!-- Modal: Host Existing Local Port (e.g. Apache, XAMPP, Node) -->
+    <div id="host-port-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Host Existing Local Server (XAMPP / Apache / Node)</h3>
+                <button class="modal-close" onclick="closeHostPortModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Service / App Name:</label>
+                    <input type="text" id="port-service-name" class="form-input-clean" placeholder="e.g. AnonChat XAMPP" value="AnonChat">
+                </div>
+                <div class="form-group">
+                    <label>Localhost Port:</label>
+                    <input type="number" id="port-number-input" class="form-input-clean" value="80">
+                    <small class="form-hint">80 for Apache/XAMPP, 3000 for Node/React, 8000/5000 for Python.</small>
+                </div>
+                <div class="form-group">
+                    <label>App Path (Optional):</label>
+                    <input type="text" id="port-subpath-input" class="form-input-clean" placeholder="e.g. /AnonChat/index.html" value="/AnonChat/index.html">
+                    <small class="form-hint">Path to your app on localhost (e.g. /AnonChat/index.html).</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeHostPortModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitHostPort()">Make Localhost Live on Tor</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: In-Browser Code / HTML Editor -->
+    <div id="code-editor-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-header">
+                <div>
+                    <h3 id="editor-file-title">Editing: index.html</h3>
+                    <small class="text-muted" id="editor-file-path" style="font-family: var(--font-mono);"></small>
+                </div>
+                <button class="modal-close" onclick="closeCodeEditorModal()">&times;</button>
+            </div>
+            <div class="modal-body editor-body">
+                <textarea id="code-editor-textarea" class="code-textarea" spellcheck="false"></textarea>
+            </div>
+            <div class="modal-footer">
+                <span id="editor-status" class="editor-status-text"></span>
+                <button class="btn btn-secondary" onclick="closeCodeEditorModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveCodeEditorContent()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Create New App / Website Folder -->
+    <div id="create-app-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Create New Website Application</h3>
+                <button class="modal-close" onclick="closeCreateAppModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Website Name / Title:</label>
+                    <input type="text" id="app-name-input" class="form-input-clean" placeholder="e.g. DarkBlog, CryptoStore, Portfolio">
+                </div>
+                <div class="form-group">
+                    <label>Custom Folder Path (Optional - Leave blank to create in project):</label>
+                    <input type="text" id="app-path-input" class="form-input-clean" placeholder="e.g. C:\Users\mohsin\Desktop\my-new-onion">
+                </div>
+                <div class="form-group">
+                    <label>Local Port:</label>
+                    <input type="number" id="app-port-input" class="form-input-clean" value="8081">
+                </div>
+                <div class="form-group checkbox-group" style="font-size: 12.5px; color: var(--text-secondary);">
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" id="app-autostart-input" checked> Automatically start hosting immediately
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCreateAppModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitCreateApp()">Create &amp; Launch Node</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: New Subfolder (mkdir) -->
+    <div id="new-folder-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-header">
+                <h3>Create New Directory</h3>
+                <button class="modal-close" onclick="closeNewFolderModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Folder Name:</label>
+                    <input type="text" id="new-folder-name" class="form-input-clean" placeholder="e.g. assets, images, pages">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeNewFolderModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitNewFolder()">Create Folder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: New HTML File Creation -->
+    <div id="new-file-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-header">
+                <h3>Create New HTML File</h3>
+                <button class="modal-close" onclick="closeNewFileModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>File Name:</label>
+                    <input type="text" id="new-file-name" class="form-input-clean" placeholder="e.g. about.html, contact.html">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeNewFileModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitNewFile()">Create &amp; Edit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Host Custom Path -->
+    <div id="new-site-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Host Custom Directory Path</h3>
+                <button class="modal-close" onclick="closeNewSiteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Direct Windows Folder Path:</label>
+                    <input type="text" id="modal-folder-path" class="form-input-clean" placeholder="e.g. C:\Users\mohsin\Desktop\my-site">
+                    <small class="form-hint">Enter any valid Windows directory path.</small>
+                </div>
+                <div class="form-group">
+                    <label>Local Port (127.0.0.1):</label>
+                    <input type="number" id="modal-port" class="form-input-clean" value="8080">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeNewSiteModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitModalNewSite()">Launch Onion Node</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Local Website Preview -->
+    <div id="preview-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3 id="preview-title">Local Preview</h3>
+                <button class="modal-close" onclick="closePreviewModal()">&times;</button>
+            </div>
+            <div class="modal-body modal-iframe-body" style="padding: 0; height: 500px;">
+                <iframe id="preview-iframe" src="about:blank" style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <a id="preview-external-link" href="#" target="_blank" class="btn btn-sm btn-secondary">Open in New Tab &nearr;</a>
+                <button class="btn btn-sm btn-secondary" onclick="closePreviewModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: File Delete Confirmation -->
+    <div id="delete-file-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-header">
+                <h3>Confirm Deletion</h3>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to permanently delete <strong id="delete-file-name" style="color: var(--text-primary);"></strong>?</p>
+                <p class="text-danger" style="font-size: 12px; margin-top: 6px;">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmDeleteFile()">Delete Permanently</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: About System & Developer (Mohsin Khawaja) -->
+    <div id="about-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>About OnionHost Local</h3>
+                <button class="modal-close" onclick="closeAboutModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-light);">
+                    <div class="avatar-mm" style="width: 52px; height: 52px; font-size: 18px; background: #2563eb; color: #ffffff;">MK</div>
+                    <div>
+                        <h4 style="font-size: 17px; font-weight: 800; color: var(--text-primary); margin-bottom: 2px;">Mohsin Khawaja</h4>
+                        <p style="font-size: 12.5px; color: var(--primary); font-weight: 600;">System Architect &amp; Lead Developer</p>
+                        <span style="font-size: 11.5px; color: var(--text-hint);">Developed &amp; Engineered by Mohsin Khawaja</span>
+                    </div>
+                </div>
+
+                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px;">
+                    <strong>OnionHost Local v2.0 Pro</strong> is a complete self-hosted Tor Onion website and service hosting platform developed by <strong>Mohsin Khawaja</strong>. It turns any Windows PC into an active dark web web server, publishing HTML websites or dynamic localhost apps (XAMPP / Apache / PHP / Node) directly onto the Tor network without port forwarding, VPS, or third-party cloud hosting.
+                </p>
+
+                <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 14px; font-size: 12px; color: var(--text-muted); display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div><strong>Developer:</strong> Mohsin Khawaja</div>
+                    <div><strong>Architecture:</strong> Windows Onion Server</div>
+                    <div><strong>Tor Engine:</strong> v0.4.9.16 (Standalone)</div>
+                    <div><strong>Cryptography:</strong> Tor v3 Hidden Service</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeAboutModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: User Profile Configuration (Clickable from bottom left) -->
+    <div id="profile-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-header">
+                <h3>User Profile Details</h3>
+                <button class="modal-close" onclick="closeProfileModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <div class="avatar-mm" id="modal-profile-avatar" style="width: 44px; height: 44px; font-size: 16px;">MK</div>
+                    <div>
+                        <div style="font-size: 13.5px; font-weight: 700; color: var(--text-primary);" id="modal-profile-name-text">Mohsin Khawaja</div>
+                        <div style="font-size: 11.5px; color: var(--text-hint);" id="modal-profile-role-text">Administrator</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Your Name / Username:</label>
+                    <input type="text" id="input-profile-name" class="form-input-clean" value="Mohsin Khawaja">
+                    <small class="form-hint">Displayed in bottom left and top greeting.</small>
+                </div>
+                <div class="form-group">
+                    <label>Role:</label>
+                    <input type="text" id="input-profile-role" class="form-input-clean" value="Administrator">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeProfileModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveUserProfile()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Host Live Website URL as Tor Onion Mirror -->
+    <div id="host-url-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Host Live Website URL (Tor Onion Mirror)</h3>
+                <button class="modal-close" onclick="closeHostUrlModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Target Website URL to Mirror:</label>
+                    <input type="text" id="url-mirror-target" class="form-input-clean" placeholder="e.g. https://www.csib.co.in or www.csib.co.in" value="https://www.csib.co.in">
+                    <small class="form-hint">Enter any live website URL. OnionHost will create a dark web Tor mirror for it.</small>
+                </div>
+                <div class="form-group">
+                    <label>Mirror Service Title / Name:</label>
+                    <input type="text" id="url-mirror-name" class="form-input-clean" placeholder="e.g. CSIB Live Mirror" value="CSIB Mirror">
+                </div>
+                <div class="form-group">
+                    <label>Local Proxy Port:</label>
+                    <input type="number" id="url-mirror-port" class="form-input-clean" value="8090">
+                    <small class="form-hint">Local port bound to 127.0.0.1 for the proxy forwarder.</small>
+                </div>
+                <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 14px; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                    &#128161; <strong>How it works:</strong> Anyone who opens your <code>.onion</code> address in Tor Browser anywhere in the world will access this live website through end-to-end encrypted Tor routing with no server setup required.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeHostUrlModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitHostUrl()">Launch Tor Onion Mirror</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/dashboard.js?v=2.6"></script>
+</body>
+</html>

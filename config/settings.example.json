@@ -1,0 +1,10 @@
+{
+    "version": "1.0.0",
+    "tor_binary": "",
+    "dashboard_port": 5000,
+    "dashboard_host": "127.0.0.1",
+    "default_http_port": 8000,
+    "sites": {},
+    "active_site_id": null
+}
+

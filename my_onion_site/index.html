@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohsin Khawaja &bull; Tor Onion Site</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%22><text y=%2222%22 font-size=%2220%22>🧅</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- Onion Security Badge -->
+        <div class="top-badge">
+            <span class="pulsing-green-dot"></span>
+            <span>END-TO-END ENCRYPTED .ONION SERVICE</span>
+        </div>
+
+        <!-- Header / Profile Section -->
+        <header class="profile-header">
+            <div class="avatar-wrapper">
+                <img src="mohsin-branding.png" alt="Mohsin Khawaja" class="branding-image">
+            </div>
+            <h1 class="brand-title">Mohsin Khawaja</h1>
+            <p class="brand-subtitle">Self-Hosted Decentralized Tor Node &amp; Web Platform</p>
+        </header>
+
+        <!-- VISITOR HIGHLIGHT ALERT -->
+        <section class="anonymous-alert-box">
+            <div class="alert-icon-area">&#128373;</div>
+            <div class="alert-text-area">
+                <h2 class="alert-headline">Hey! You are using Dark Web and you are anonymous.</h2>
+                <p class="alert-description">
+                    Your real IP address, identity, and physical location are completely hidden behind Tor's triple-layer onion encryption circuits.
+                </p>
+            </div>
+        </section>
+
+        <!-- Feature Cards -->
+        <section class="grid-features">
+            <div class="card">
+                <div class="card-icon">&#128274;</div>
+                <h3>100% Zero-Leak Anonymity</h3>
+                <p>No tracking cookies, no external CDN calls, no analytics scripts. Everything is served strictly from this local machine.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">&#9889;</div>
+                <h3>Decentralized Hosting</h3>
+                <p>Hosted directly by Mohsin Khawaja without cloud providers, VPS rental, or DNS registration.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">&#127760;</div>
+                <h3>Tor v3 Cryptography</h3>
+                <p>Secured with Ed25519 public-key authentication and ephemeral rendezvous circuits.</p>
+            </div>
+        </section>
+
+        <!-- Live Terminal / Session Status -->
+        <section class="status-panel">
+            <div class="panel-header">
+                <span class="terminal-dots">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                </span>
+                <span class="panel-title">Session Telemetry</span>
+            </div>
+            <div class="panel-body">
+                <div class="stat-row">
+                    <span class="stat-name">Node Operator:</span>
+                    <span class="stat-val highlight">Mohsin Khawaja</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">Connection Protocol:</span>
+                    <span class="stat-val mono">Tor Hidden Service v3</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">Client Anonymity Status:</span>
+                    <span class="stat-val status-green">&#10004; Fully Anonymous &amp; Encrypted</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">Local Time (Visitor):</span>
+                    <span class="stat-val mono" id="live-time">Synchronizing...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Verification -->
+        <section class="interactive-area">
+            <button class="glow-button" onclick="verifyCircuit()">Run Circuit Ping Test</button>
+            <div id="test-result" class="test-result"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 <strong>Mohsin Khawaja</strong> &bull; Hosted with OnionHost</p>
+            <p class="footer-sub">Private &bull; Anonymous &bull; Uncensored</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
